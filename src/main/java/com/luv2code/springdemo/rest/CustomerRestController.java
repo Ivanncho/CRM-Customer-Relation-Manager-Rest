@@ -3,6 +3,7 @@ package com.luv2code.springdemo.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,6 +57,20 @@ public class CustomerRestController {
 		
 		customerService.saveCustomer(customer);
 		return customer;
+	}
+	
+	//delete a customer
+	@DeleteMapping("/customers/{customerId}")
+	public String deleteCustomer(@PathVariable int customerId) {
+		
+		Customer tempCustomer = customerService.getCustomer(customerId);
+		if(tempCustomer == null) {
+			throw new CustomerNotFoundException("Customer with id=" + customerId + " not found!");
+		}
+		
+		customerService.deleteCustomer(customerId);
+		
+		return "Deleted customer with id: " + customerId;
 	}
 	
 }
